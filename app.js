@@ -20,7 +20,7 @@ function addKitten(event) {
     id: kittenId,
     name: kittenName,
     mood: "tolerant",
-    affection: 5 
+    affection: 5
   }
   kittens.push(cat)
   event.target.reset()
@@ -37,24 +37,24 @@ function addKitten(event) {
  * Saves the string to localstorage at the key kittens
  */
 function saveKittens() {
-window.localStorage.setItem("kittens", JSON.stringify(kittens))
-drawKittens()
+  window.localStorage.setItem("kittens", JSON.stringify(kittens))
+  drawKittens()
 }
 /**
  * Attempts to retrieve the kittens string from localstorage
  * then parses the JSON string into an array. Finally sets
  * the kittens array to the retrieved array
  */
-function loadKittens() {}
+function loadKittens() { }
 
 /**
  * Draw all of the kittens to the kittens element
  */
 function drawKittens() {
-let kittensListElement = document.getElementById("kittens")
-let kittensTemplate = ""
-kittens.forEach(kitten => {
-  kittensTemplate += `
+  let kittensListElement = document.getElementById("kittens")
+  let kittensTemplate = ""
+  kittens.forEach(kitten => {
+    kittensTemplate += `
    <div class="kitten-card card mt-1 mb-1">
     <img src="https://robohash.org/${kitten.name}?set=set4"/>
     <p> name: ${kitten.name} </p>
@@ -63,7 +63,7 @@ kittens.forEach(kitten => {
     </div>
   `
   })
-  kittensListElement.innerHTML=kittensTemplate
+  kittensListElement.innerHTML = kittensTemplate
 }
 
 /**
@@ -84,7 +84,7 @@ function findKittenById(id) {
  * save the kittens
  * @param {string} id
  */
-function pet(id) {}
+function pet(id) { }
 
 /**
  * Find the kitten in the array of kittens
@@ -93,14 +93,14 @@ function pet(id) {}
  * save the kittens
  * @param {string} id
  */
-function catnip(id) {}
+function catnip(id) { }
 
 /**
  * Sets the kittens mood based on its affection
  * Happy > 6, Tolerant <= 5, Angry <= 3, Gone <= 0
  * @param {Kitten} kitten
  */
-function setKittenMood(kitten) {}
+function setKittenMood(kitten) { }
 
 function getStarted() {
   document.getElementById("welcome").remove();
