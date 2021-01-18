@@ -14,18 +14,16 @@ let kittens = [];
  */
 function addKitten(event) {
   event.preventDefault()
-  let kittenName = event.target.name.value
-  let kittenId = generateId()
-  let cat = {
-    id: kittenId,
-    name: kittenName,
+  let form = event.target
+  let kitten = {
+    id: generateId(),
+    name: form.name.value,
     mood: "tolerant",
     affection: 5
   }
-  kittens.push(cat)
-  event.target.reset()
-  console.log(kittens)
+  kittens.push(kitten)
   saveKittens()
+  form.reset()
 }
 
 /* cat 
@@ -45,7 +43,12 @@ function saveKittens() {
  * then parses the JSON string into an array. Finally sets
  * the kittens array to the retrieved array
  */
-function loadKittens() { }
+function loadKittens() {
+  let kittensData = JSON.parse(window.localStorage.getItem("kittens"))
+  if (kittensData) {
+    kittens = kittensData
+  }
+}
 
 /**
  * Draw all of the kittens to the kittens element
@@ -55,11 +58,15 @@ function drawKittens() {
   let kittensTemplate = ""
   kittens.forEach(kitten => {
     kittensTemplate += `
-   <div class="kitten-card card mt-1 mb-1">
+   <div class="kitten-card card bg-dark text-light wide-boi p-3">
     <img src="https://robohash.org/${kitten.name}?set=set4"/>
-    <p> name: ${kitten.name} </p>
-    <p> mood: ${kitten.mood} </p>
-    <p> affection: ${kitten.affection} </p>
+    <p> Name: ${kitten.name} </p>
+    <p> Mood: ${kitten.mood} </p>
+    <p> Affection: ${kitten.affection} </p>
+      <div class= "d-flex space-between">
+        <button class= "btn-cancel" id="pet-button" onclick="pet()">PET</button>
+        <button  id="catnip-button" onclick="catnip()">CATNIP</button>
+      </div>
     </div>
   `
   })
@@ -84,7 +91,9 @@ function findKittenById(id) {
  * save the kittens
  * @param {string} id
  */
-function pet(id) { }
+function pet(id) {
+
+}
 
 /**
  * Find the kitten in the array of kittens
@@ -93,14 +102,18 @@ function pet(id) { }
  * save the kittens
  * @param {string} id
  */
-function catnip(id) { }
+function catnip(id) {
+
+}
 
 /**
  * Sets the kittens mood based on its affection
  * Happy > 6, Tolerant <= 5, Angry <= 3, Gone <= 0
  * @param {Kitten} kitten
  */
-function setKittenMood(kitten) { }
+function setKittenMood(kitten) {
+
+}
 
 function getStarted() {
   document.getElementById("welcome").remove();
@@ -108,8 +121,12 @@ function getStarted() {
 }
 
 /**
+ * @typedef {{id: string;name: string;mood: string;affection: number;}} NewType
+ */
+
+/**
  * Defines the Properties of a Kitten
- * @typedef {{id: string, name: string, mood: string, affection: number}} Kitten
+ * @typedef {NewType} Kitten
  */
 
 /**
@@ -124,3 +141,5 @@ function generateId() {
     Math.floor(Math.random() * 10000000)
   );
 }
+
+loadKittens()
