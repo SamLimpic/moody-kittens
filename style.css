@@ -13,6 +13,7 @@
   --dark-lighten: #504c4c;
   --light: #fdfdfd;
   --danger: #ff3737;
+  --bold: font-weight: bold;
 }
 
 body{

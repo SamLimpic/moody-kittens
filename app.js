@@ -3,6 +3,7 @@
  * @type {Kitten[]}
  */
 let kittens = [];
+let kitten = {};
 /**
  * Called when submitting the new Kitten Form
  * This method will pull data from the form
@@ -18,7 +19,7 @@ function addKitten(event) {
   let kitten = {
     id: generateId(),
     name: form.name.value,
-    mood: "tolerant",
+    mood: "Tolerant",
     affection: 5
   }
   kittens.push(kitten)
@@ -58,16 +59,17 @@ function drawKittens() {
   let kittensTemplate = ""
   kittens.forEach(kitten => {
     kittensTemplate += `
-   <div class="kitten-card card bg-dark text-light wide-boi p-3">
+   <div class="kitten-card card bg-dark text-light wide-boi p-3 m-2">
     <img src="https://robohash.org/${kitten.name}?set=set4"/>
-    <p> Name: ${kitten.name} </p>
-    <p> Mood: ${kitten.mood} </p>
-    <p> Affection: ${kitten.affection} </p>
+    <p class="hidden"> id: ${kitten.id} </p>
+    <p> <strong>Name:</strong> ${kitten.name} </p>
+    <p> <strong>Mood:</strong> ${kitten.mood} </p>
+    <p> <strong>Affection:</strong> ${kitten.affection} </p>
       <div class= "d-flex space-between">
         <button class= "btn-cancel" id="pet-button" onclick="pet()">PET</button>
         <button  id="catnip-button" onclick="catnip()">CATNIP</button>
       </div>
-    </div>
+   </div>
   `
   })
   kittensListElement.innerHTML = kittensTemplate
