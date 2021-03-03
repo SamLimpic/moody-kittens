@@ -14,7 +14,7 @@
 <body>
   <header class="bg-dark d-flex align-items-center p-1 space-between">
     <img src="moody-logo.png" height="60" alt="Moody Kittens">
-    <form class="" onsubmit="addKitten(event)">
+    <form id="add-kitten" class="hidden" onsubmit="addKitten(event)">
       <div class="d-flex">
         <input placeholder="Name" type="text" name="name" />
         <button class="btn-special" type="submit">
@@ -29,12 +29,12 @@
         <img src="moody-logo.png" height="250" alt="Moody Kittens">
         <div class="mt-2">
           <b class="text-center">Hello Human</b>
-          <p>Your newly-acquired cat colony requires a steady supply of pets and catnip, else things will not end well
-            for you....</p>
+          <p>Your cat colony requires constant attention in order to thrive!</p>
           <small>We hope you have prepared yourself...</small>
           <br>
-          <button onclick="getStarted()">Your Cat Colony!</button>
+          <button id="get-started" onclick="getStarted()"></button>
         </div>
+        <button id="release" class="btn-cancel hidden" onclick="releaseKittens()"></button>
       </div>
     </div>
     <div>

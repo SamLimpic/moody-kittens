@@ -3,7 +3,7 @@
  * @type {Kitten[]}
  */
 let kittens = [];
-let kitten = {};
+
 /**
  * Called when submitting the new Kitten Form
  * This method will pull data from the form
@@ -48,8 +48,43 @@ function loadKittens() {
   let kittensData = JSON.parse(window.localStorage.getItem("kittens"))
   if (kittensData) {
     kittens = kittensData
+    document.getElementById("release").classList.remove("hidden")
+    if (kittens.length == 1) {
+      document.getElementById("release").innerText = "RELEASE YOUR KITTEN";
+    } else {
+      document.getElementById("release").innerText = "RELEASE YOUR " + kittens.length + " KITTENS";
+    }
+  }
+  if (kittens.length == 0) {
+    document.getElementById("get-started").innerText = "START YOUR CAT COLONY";
+  } else if (kittens.length == 1) {
+    document.getElementById("get-started").innerText = "VISIT YOUR KITTEN";
+  } else {
+    document.getElementById("get-started").innerText = "VISIT YOUR " + kittens.length + " KITTENS";
   }
 }
+
+
+function releaseKittens() {
+  localStorage.clear();
+  reloadPage();
+}
+
+
+window.onload = function () {
+  let reload = sessionStorage.getItem("reload");
+  if (reload) {
+    sessionStorage.removeItem("reload");
+    getStarted();
+  }
+}
+
+function reloadPage() {
+  sessionStorage.setItem("reload", "true");
+  document.location.reload();
+}
+
+
 
 /**
  * Draw all of the kittens to the kittens element
@@ -58,17 +93,27 @@ function drawKittens() {
   let kittensListElement = document.getElementById("kittens")
   let kittensTemplate = ""
   kittens.forEach(kitten => {
+    let hidden = '';
+    let red = '';
+    let away = 'hidden';
+    if (kitten.mood == "Gone") {
+      hidden = 'hidden'
+      red = 'red-text'
+      away = ''
+    }
     kittensTemplate += `
-   <div class="kitten-card card bg-dark text-light wide-boi p-3 m-2">
-    <img src="https://robohash.org/${kitten.name}?set=set4"/>
-    <p class="hidden"> id: ${kitten.id} </p>
+   <div id="kittens" class="p-2 m-1 shadow bg-dark text-light kitten-card ${red}">
+    <img src="https://robohash.org/${kitten.name}?set=set4" class="kitten ${kitten.mood.toLowerCase()}"/>
+    <label>
     <p> <strong>Name:</strong> ${kitten.name} </p>
-    <p> <strong>Mood:</strong> ${kitten.mood} </p>
-    <p> <strong>Affection:</strong> ${kitten.affection} </p>
-      <div class= "d-flex space-between">
-        <button class= "btn-cancel" id="pet-button" onclick="pet()">PET</button>
-        <button  id="catnip-button" onclick="catnip()">CATNIP</button>
-      </div>
+    <p class = ${hidden}> <strong>Mood:</strong> ${kitten.mood} </p>
+    <p class = ${hidden}> <strong>Affection:</strong> ${kitten.affection} </p>
+    <p class = ${away}> <strong>Left your colony!</strong> </p>
+    </label>
+    <div class= "d-flex space-between ${hidden}">
+        <button class= "btn-cancel" id="pet-button" onclick="pet('${kitten.id}')">PET</button>
+        <button  id="catnip-button" onclick="catnip('${kitten.id}')">CATNIP</button>
+    </div>
    </div>
   `
   })
@@ -94,7 +139,16 @@ function findKittenById(id) {
  * @param {string} id
  */
 function pet(id) {
-
+  let kitten = findKittenById(id);
+  let affection = kitten.affection;
+  if (Math.random() > .7) {
+    affection += 1;
+  } else {
+    affection -= 1;
+  }
+  kitten.affection = affection;
+  setKittenMood(kitten);
+  saveKittens();
 }
 
 /**
@@ -105,7 +159,10 @@ function pet(id) {
  * @param {string} id
  */
 function catnip(id) {
-
+  let kitten = findKittenById(id);
+  kitten.affection = 5;
+  setKittenMood(kitten);
+  saveKittens();
 }
 
 /**
@@ -114,11 +171,20 @@ function catnip(id) {
  * @param {Kitten} kitten
  */
 function setKittenMood(kitten) {
-
+  if (kitten.affection <= 0) {
+    kitten.mood = "Gone";
+  } else if (kitten.affection <= 3) {
+    kitten.mood = "Angry";
+  } else if (kitten.affection <= 5) {
+    kitten.mood = "Tolerant";
+  } else if (kitten.affection > 6) {
+    kitten.mood = "Happy";
+  }
 }
 
 function getStarted() {
   document.getElementById("welcome").remove();
+  document.getElementById("add-kitten").classList.remove("hidden")
   drawKittens();
 }
 
@@ -145,3 +211,9 @@ function generateId() {
 }
 
 loadKittens()
+
+/** DELETE BEFORE LAUNCH *
+
+getStarted()
+
+/** DELETE BEFORE LAUNCH */
