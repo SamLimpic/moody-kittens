@@ -94,7 +94,7 @@ function removeKitten(kittenId) {
   let index = kittens.findIndex(kitten => kitten.id == kittenId)
   kittens.splice(index, 1)
   saveKittens()
-  reloadPage();
+
 }
 
 
