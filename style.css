@@ -128,6 +128,7 @@ button.btn-special:hover{
   filter: drop-shadow(var(--shadow));
 }
 
+/* Needed to remove IMG from .kitten classes to enable functionality */
 
 .kitten{
   filter: drop-shadow(2px 4px 6px #1b1b1b);
@@ -177,6 +178,16 @@ button.btn-special:hover{
 
 .text-danger{
   color: var(--danger);
+}
+
+.text-red{
+  color: var(--danger);
+  text-align: center;
+}
+
+.text-green{
+  color: var(--primary-lighten);
+  text-align: center;
 }
 
 .d-flex{
@@ -258,10 +269,6 @@ button.btn-special:hover{
 
 .kitten-card{
   width: 175px;
-}
-
-.red-text{
-  color:var(--danger)
 }
 
 .text-center{

@@ -4,14 +4,10 @@
  */
 let kittens = [];
 
+
+
 /**
- * Called when submitting the new Kitten Form
- * This method will pull data from the form
- * use the provided function to give the data an id
- * you can use robohash for images
- * https://robohash.org/<INSERTCATNAMEHERE>?set=set4
- * then add that data to the kittens list.
- * Then reset the form
+ * Defaulted each Kitten Card to Tolerant with 5 Affection
  */
 function addKitten(event) {
   event.preventDefault()
@@ -27,22 +23,21 @@ function addKitten(event) {
   form.reset()
 }
 
-/* cat 
-{id: string, name: string, mood: string, affection: number}} Kitten
-*/
+
 
 /**
- * Converts the kittens array to a JSON string then
- * Saves the string to localstorage at the key kittens
+ * Saves Kittens to Local Storage then Draws the Kittens with the latest saved data
  */
 function saveKittens() {
   window.localStorage.setItem("kittens", JSON.stringify(kittens))
   drawKittens()
 }
+
+
+
 /**
- * Attempts to retrieve the kittens string from localstorage
- * then parses the JSON string into an array. Finally sets
- * the kittens array to the retrieved array
+ * Loads Kittens from Local Storage
+ * Added functionality that modifies the amount of displayed kittens on the Welcome page buttons
  */
 function loadKittens() {
   let kittensData = JSON.parse(window.localStorage.getItem("kittens"))
@@ -65,11 +60,16 @@ function loadKittens() {
 }
 
 
+
+/**
+ * Added a Release Kittens button to the Get Started page, which clears the Local Storage
+ * Included a Reload Page function to refresh the Session storage and incorporated the Get Started function On Load
+ * This allows the Release Kittens button to function the same as the Start Your Colony button
+ */
 function releaseKittens() {
   localStorage.clear();
   reloadPage();
 }
-
 
 window.onload = function () {
   let reload = sessionStorage.getItem("reload");
@@ -87,7 +87,22 @@ function reloadPage() {
 
 
 /**
- * Draw all of the kittens to the kittens element
+ * Removes a specific Kitten from Local Storage
+ * Framework was pulled from the Contacts assignment and modified to fit this project
+ */
+function removeKitten(kittenId) {
+  let index = kittens.findIndex(kitten => kitten.id == kittenId)
+  kittens.splice(index, 1)
+  saveKittens()
+  reloadPage();
+}
+
+
+
+/**
+ * Draw all of the Kittens to the Kittens Element
+ * Incorporated an If Statement into the forEach function to dynamically display the .kitten.gone CSS
+ * kittensTemplate framework was pulled from the Contacts assignment and modified to fit this project
  */
 function drawKittens() {
   let kittensListElement = document.getElementById("kittens")
@@ -95,30 +110,52 @@ function drawKittens() {
   kittens.forEach(kitten => {
     let hidden = '';
     let red = '';
+    let green = '';
     let away = 'hidden';
+    let win = 'hidden';
+    let adopt = 'hidden';
+    let release = 'hidden';
     if (kitten.mood == "Gone") {
       hidden = 'hidden'
-      red = 'red-text'
+      red = 'text-red'
       away = ''
+      release = ''
+    }
+    if (kitten.mood == "Happy") {
+      hidden = 'hidden'
+      green = 'text-green'
+      win = ''
+      adopt = ''
     }
     kittensTemplate += `
-   <div id="kittens" class="p-2 m-1 shadow bg-dark text-light kitten-card ${red}">
+   <div id="kittens" class="p-2 m-1 shadow bg-dark text-light kitten-card ${red} ${green}">
     <img src="https://robohash.org/${kitten.name}?set=set4" class="kitten ${kitten.mood.toLowerCase()}"/>
     <label>
-    <p> <strong>Name:</strong> ${kitten.name} </p>
+    <p class = ${hidden}> <strong>Name:</strong> ${kitten.name} </p>
     <p class = ${hidden}> <strong>Mood:</strong> ${kitten.mood} </p>
     <p class = ${hidden}> <strong>Affection:</strong> ${kitten.affection} </p>
-    <p class = ${away}> <strong>Left your colony!</strong> </p>
+    <p class = ${away}> <strong> ${kitten.name} has left you!</strong> </p>
+    <p class = ${win}> <strong>${kitten.name} is here to stay!</strong> </p>
     </label>
     <div class= "d-flex space-between ${hidden}">
-        <button class= "btn-cancel" id="pet-button" onclick="pet('${kitten.id}')">PET</button>
-        <button  id="catnip-button" onclick="catnip('${kitten.id}')">CATNIP</button>
+        <button class= "btn-cancel" id="pet-button" onclick="pet('${kitten.id}')"> <strong> PET </strong> </button>
+        <button  id="catnip-button" onclick="catnip('${kitten.id}')"> <strong> CATNIP </strong> </button>
+    </div>
+    <div class= "d-flex justify-content-center ${adopt}">
+         <form action="https://www.aspca.org/adopt-pet/adoptable-cats-your-local-shelter" target="_blank">
+         <button type="submit"> <strong> You're ready to adopt your own kitten! </strong> </button>
+         </form>
+    </div>
+    <div class= "d-flex justify-content-center ${release}">
+         <button class= "btn-cancel" id="pet-button" onclick="removeKitten('${kitten.id}')"> <strong> Let's make some room for more kittens! </strong> </button>
     </div>
    </div>
   `
   })
   kittensListElement.innerHTML = kittensTemplate
 }
+
+
 
 /**
  * Find the kitten in the array by its id
@@ -129,13 +166,13 @@ function findKittenById(id) {
   return kittens.find(k => k.id == id);
 }
 
+
+
 /**
  * Find the kitten in the array of kittens
- * Generate a random Number
- * if the number is greater than .7
- * increase the kittens affection
- * otherwise decrease the affection
- * save the kittens
+ * Modify the Kitten's affection using Math.random and If / Else (> .7 Increases Affection, else Decreases)
+ * Tied the setKittenMood function to occur in tandem with any changes in Affection
+ * Saves the Kittens
  * @param {string} id
  */
 function pet(id) {
@@ -151,11 +188,13 @@ function pet(id) {
   saveKittens();
 }
 
+
+
 /**
  * Find the kitten in the array of kittens
- * Set the kitten's mood to tolerant
- * Set the kitten's affection to 5
- * save the kittens
+ * Sets the Kitten's Affection to 5
+ * Tied the setKittenMood function to occur in tandem with any changes in Affection
+ * Saves the Kittens
  * @param {string} id
  */
 function catnip(id) {
@@ -165,9 +204,12 @@ function catnip(id) {
   saveKittens();
 }
 
+
+
 /**
  * Sets the kittens mood based on its affection
  * Happy > 6, Tolerant <= 5, Angry <= 3, Gone <= 0
+ * Used an If / Else chain from least to greatest value
  * @param {Kitten} kitten
  */
 function setKittenMood(kitten) {
@@ -182,11 +224,18 @@ function setKittenMood(kitten) {
   }
 }
 
+
+/**
+ * Removes the Welcome element and removes the .hidden class from the Add Kitten input field
+ * Draws the Kittens
+ */
 function getStarted() {
   document.getElementById("welcome").remove();
   document.getElementById("add-kitten").classList.remove("hidden")
   drawKittens();
 }
+
+
 
 /**
  * @typedef {{id: string;name: string;mood: string;affection: number;}} NewType
@@ -196,6 +245,8 @@ function getStarted() {
  * Defines the Properties of a Kitten
  * @typedef {NewType} Kitten
  */
+
+
 
 /**
  * Used to generate a random string id for mocked
@@ -210,10 +261,9 @@ function generateId() {
   );
 }
 
+
+/**
+ * Loads the Kittens from Local Storage, ensuring a default up-to-date Kittens element
+ * Also updates the Welcome buttons by default with the approriate number of Kittens
+ */
 loadKittens()
-
-/** DELETE BEFORE LAUNCH *
-
-getStarted()
-
-/** DELETE BEFORE LAUNCH */
