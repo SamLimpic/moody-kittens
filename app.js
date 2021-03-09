@@ -138,16 +138,16 @@ function drawKittens() {
     <p class = ${win}> <strong>${kitten.name} is here to stay!</strong> </p>
     </label>
     <div class= "d-flex space-between ${hidden}">
-        <button class= "btn-cancel" id="pet-button" onclick="pet('${kitten.id}')"> <strong> PET </strong> </button>
-        <button  id="catnip-button" onclick="catnip('${kitten.id}')"> <strong> CATNIP </strong> </button>
+        <button class= "btn-cancel shadow" id="pet-button" onclick="pet('${kitten.id}')"> <strong> PET </strong> </button>
+        <button  class = "shadow" id="catnip-button" onclick="catnip('${kitten.id}')"> <strong> CATNIP </strong> </button>
     </div>
     <div class= "d-flex justify-content-center ${adopt}">
          <form action="https://www.aspca.org/adopt-pet/adoptable-cats-your-local-shelter" target="_blank">
-         <button type="submit"> <strong> You're ready to adopt your own kitten! </strong> </button>
+         <button class = "shadow" type="submit"> <strong> You're ready to adopt your own kitten! </strong> </button>
          </form>
     </div>
     <div class= "d-flex justify-content-center ${release}">
-         <button class= "btn-cancel" id="pet-button" onclick="removeKitten('${kitten.id}')"> <strong> Let's make some room for more kittens! </strong> </button>
+         <button class= "btn-cancel shadow" id="pet-button" onclick="removeKitten('${kitten.id}')"> <strong> Make room for more kittens! </strong> </button>
     </div>
    </div>
   `

@@ -2,17 +2,18 @@
   box-sizing: border-box;
 }
 :root{
-  --primary: #abce5c;
-  --primary-lighten: #b7f12e;
-  --primary-darken: #6f8639;
-  --bg: #e0d9d9;
+  --primary: #8ace5c;
+  --primary-lighten: #66ff00;
+  --primary-darken: #60b329;
+  --bg: #bdb8b8;
   --shadow: 2px 0 5px rgba(49, 49, 49, 0.5);
   --corners: 0;
   --text-color: #3a3838;
-  --dark: #3a3838;
-  --dark-lighten: #504c4c;
+  --dark: #302f2f;
+  --dark-lighten: #464141;
   --light: #fdfdfd;
-  --danger: #ff3737;
+  --danger: #ff0000;
+  --danger-darken: #bd2626;
   --bold: font-weight: bold;
 }
 
@@ -53,7 +54,7 @@ form{
 
 label{
   display: block;
-  font-size: 12pt;
+  font-size: .75em;
 }
 
 input{
@@ -72,21 +73,23 @@ input:focus{
 }
 
 button{
-  background-color: var(--primary);
-  color: var(--light);
+  background-color: var(--primary-lighten);
+  color: var(--text-color);
   border: none;
   border-radius: var(--corners);
   box-shadow: var(--shadow);
   text-transform: uppercase;
-  transition: all .2s ease;
+  transition: all .5s ease;
   cursor: pointer;
   padding: .5em;
+  font-weight: bold;
 }
 button:focus{
   outline: none;
 }
 button:hover{
-  background-color: var(--primary-lighten);
+  background-color: var(--primary-darken);
+  color: var(--light);
 }
 
 button.btn-special{
@@ -113,6 +116,30 @@ button.btn-special:focus{
 button.btn-special:hover{
   color: var(--primary);
 }
+
+.btn-dark{
+  background-color: var(--dark-lighten);
+  border-color: var(--dark);
+}
+.btn-dark:hover{
+  background-color: var(--dark);
+  border-color: var(--dark-lighten);
+}
+
+.btn-cancel{
+  background-color: var(--danger);
+  border-color: red;
+  border: none;
+  border-radius: var(--corners);
+  box-shadow: var(--shadow);
+  transition: all .5s ease;
+}
+.btn-cancel:hover{
+  background-color: var(--danger-darken);
+  border-color: #ff3737;
+  color: var(--light)
+}
+
 .container{
   margin: 0 .5em;
 }
@@ -122,6 +149,10 @@ button.btn-special:hover{
   padding: 1em;
   box-shadow: var(--shadow);
   border-radius: var(--corners);
+}
+
+.kitten-card{
+  width: 8em;
 }
 
 .shadow{
@@ -156,24 +187,6 @@ button.btn-special:hover{
 }
 .text-light{
   color: var(--light)
-}
-
-.btn-dark{
-  background-color: var(--dark-lighten);
-  border-color: var(--dark);
-}
-.btn-dark:hover{
-  background-color: var(--dark);
-  border-color: var(--dark-lighten);
-}
-
-.btn-cancel{
-  background-color: red;
-  border-color: lightcoral;
-}
-.btn-cancel:hover{
-  background-color: #fa4141;
-  border-color: #ff3737;
 }
 
 .text-danger{
@@ -265,10 +278,6 @@ button.btn-special:hover{
 }
 .pb-3{
   padding-bottom: 1.5em;
-}
-
-.kitten-card{
-  width: 175px;
 }
 
 .text-center{
