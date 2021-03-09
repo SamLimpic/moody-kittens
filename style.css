@@ -4,7 +4,7 @@
 :root{
   --primary: #8ace5c;
   --primary-lighten: #66ff00;
-  --primary-darken: #60b329;
+  --primary-darken: #55a023;
   --bg: #bdb8b8;
   --shadow: 2px 0 5px rgba(49, 49, 49, 0.5);
   --corners: 0;
@@ -13,18 +13,18 @@
   --dark-lighten: #464141;
   --light: #fdfdfd;
   --danger: #ff0000;
-  --danger-darken: #bd2626;
+  --danger-darken: #a52222;
   --bold: font-weight: bold;
 }
 
 body{
   background-color: var(--bg);
-  font-size: 16pt;
+  font-size: 14pt;
   color: var(--text-color);
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'Catamaran', sans-serif;
+  font-family: 'Architects Daughter', cursive;
 }
 
 header{
@@ -83,6 +83,7 @@ button{
   cursor: pointer;
   padding: .5em;
   font-weight: bold;
+  font-family: inherit;
 }
 button:focus{
   outline: none;
@@ -152,7 +153,7 @@ button.btn-special:hover{
 }
 
 .kitten-card{
-  width: 8em;
+  width: 10em;
 }
 
 .shadow{
@@ -201,6 +202,14 @@ button.btn-special:hover{
 .text-green{
   color: var(--primary-lighten);
   text-align: center;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.standard-font{
+  font-size: 12pt;
 }
 
 .d-flex{
@@ -278,10 +287,6 @@ button.btn-special:hover{
 }
 .pb-3{
   padding-bottom: 1.5em;
-}
-
-.text-center{
-  text-align: center;
 }
 
 .action{
