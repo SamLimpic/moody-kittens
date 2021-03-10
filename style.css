@@ -14,6 +14,8 @@
   --light: #fdfdfd;
   --danger: #ff0000;
   --danger-darken: #a52222;
+  --nipped: #cd28ff;
+  --nipped-darken: #71118f;
   --bold: font-weight: bold;
 }
 
@@ -141,6 +143,20 @@ button.btn-special:hover{
   color: var(--light)
 }
 
+.btn-nipped{
+  background-color: var(--nipped);
+  border-color: #621197;
+  border: none;
+  border-radius: var(--corners);
+  box-shadow: var(--shadow);
+  transition: all .5s ease;
+}
+.btn-nipped:hover{
+  background-color: var(--nipped-darken);
+  border-color: #9900ff;
+  color: var(--light)
+}
+
 .container{
   margin: 0 .5em;
 }
@@ -182,7 +198,9 @@ button.btn-special:hover{
   color: var(--danger);
   pointer-events: none;
 }
-
+.kitten.nipped{
+  filter: drop-shadow(2px 4px 6px #9900ff) contrast(1);
+}
 .bg-dark{
   background-color: var(--dark);
 }
@@ -201,6 +219,11 @@ button.btn-special:hover{
 
 .text-green{
   color: var(--primary-lighten);
+  text-align: center;
+}
+
+.text-purple{
+  color: var(--nipped);
   text-align: center;
 }
 

@@ -8,6 +8,7 @@ let kittens = [];
 
 /**
  * Defaulted each Kitten Card to Tolerant with 5 Affection
+ * Added a nipCount property that is tied to the Catnip function
  */
 function addKitten(event) {
   event.preventDefault()
@@ -16,7 +17,8 @@ function addKitten(event) {
     id: generateId(),
     name: form.name.value,
     mood: "Tolerant",
-    affection: 5
+    affection: 5,
+    nipCount: 0,
   }
   kittens.push(kitten)
   saveKittens()
@@ -101,7 +103,10 @@ function removeKitten(kittenId) {
 
 /**
  * Draw all of the Kittens to the Kittens Element
- * Incorporated an If Statement into the forEach function to dynamically display the .kitten.gone CSS
+ * Incorporated an If Statement into the forEach function to dynamically display the .kitten.mood CSS
+ * Modified the "Happy" game state to "win" the game and incorporated a link to ASPCA's adoption page
+ * Modified the "Gone" game state to incorporate the "Remove Kitten" function
+ * Incorporated a third game state "Nipped" that incorporates the "Nipped" function
  * kittensTemplate framework was pulled from the Contacts assignment and modified to fit this project
  */
 function drawKittens() {
@@ -111,24 +116,30 @@ function drawKittens() {
     let hidden = '';
     let red = '';
     let green = '';
+    let purple = '';
     let away = 'hidden';
     let win = 'hidden';
     let adopt = 'hidden';
     let release = 'hidden';
-    if (kitten.mood == "Gone") {
+    let nip = 'hidden';
+    if (kitten.mood == "Nipped") {
+      hidden = 'hidden'
+      purple = 'text-purple'
+      nip = ''
+    } else if (kitten.mood == "Gone") {
       hidden = 'hidden'
       red = 'text-red'
       away = ''
       release = ''
-    }
-    if (kitten.mood == "Happy") {
+    } else if (kitten.mood == "Happy") {
       hidden = 'hidden'
       green = 'text-green'
       win = ''
       adopt = ''
     }
+
     kittensTemplate += `
-   <div id="kittens" class="p-2 m-1 shadow bg-dark text-light kitten-card ${red} ${green}">
+   <div id="kittens" class="p-2 m-1 shadow bg-dark text-light kitten-card ${red} ${green} ${purple}">
     <img src="https://robohash.org/${kitten.name}?set=set4" class="kitten ${kitten.mood.toLowerCase()}"/>
     <label>
     <p class = ${hidden}> <strong>Name:</strong> ${kitten.name} </p>
@@ -136,6 +147,7 @@ function drawKittens() {
     <p class = ${hidden}> <strong>Affection:</strong> ${kitten.affection} </p>
     <p class = ${away}> <strong> ${kitten.name} has gone to find a new colony!</strong> </p>
     <p class = ${win}> <strong>${kitten.name} has found their forever home!</strong> </p>
+    <p class = ${nip}> <strong> Looks like ${kitten.name} is taking a nap!</strong> </p>
     </label>
     <div class= "d-flex space-between ${hidden}">
         <button class= "btn-cancel shadow" id="pet-button" onclick="pet('${kitten.id}')"> <strong> PET </strong> </button>
@@ -147,7 +159,10 @@ function drawKittens() {
          </form>
     </div>
     <div class= "d-flex justify-content-center ${release}">
-         <button class= "btn-cancel shadow" id="pet-button" onclick="removeKitten('${kitten.id}')"> <strong> Time to make room for some more kittens! </strong> </button>
+         <button class= "btn-cancel shadow" onclick="removeKitten('${kitten.id}')"> <strong> Time to make room for some more kittens! </strong> </button>
+    </div>
+    <div class= "d-flex justify-content-center ${nip}">
+         <button class= "btn-nipped shadow" onclick="nipped('${kitten.id}')"> <strong> You can try to wake them up, but please be gentle! </strong> </button>
     </div>
    </div>
   `
@@ -170,22 +185,26 @@ function findKittenById(id) {
 
 /**
  * Find the kitten in the array of kittens
- * Modify the Kitten's affection using Math.random and If / Else (> .7 Increases Affection, else Decreases)
- * Tied the setKittenMood function to occur in tandem with any changes in Affection
+ * Modify the Kitten's affection and nipCount using Math.random and If / Else
+ * 70% chance to lower the kitten's affection by 1, and 30% chance to raise it by 1
+ * 10% chance to lower the kitten's nipCount by 1
+ * Calls setKittenMood and saveKittens
  * Saves the Kittens
  * @param {string} id
  */
 function pet(id) {
-  let kitten = findKittenById(id);
-  let affection = kitten.affection;
-  if (Math.random() > .7) {
-    affection += 1;
+  let kitten = findKittenById(id)
+  let random = Math.random()
+  if (random > .7) {
+    kitten.affection += 1
   } else {
-    affection -= 1;
+    kitten.affection -= 1
   }
-  kitten.affection = affection;
-  setKittenMood(kitten);
-  saveKittens();
+  if (random > .9) {
+    kitten.nipCount -= 1
+  }
+  setKittenMood(kitten)
+  saveKittens()
 }
 
 
@@ -193,13 +212,15 @@ function pet(id) {
 /**
  * Find the kitten in the array of kittens
  * Sets the Kitten's Affection to 5
- * Tied the setKittenMood function to occur in tandem with any changes in Affection
- * Saves the Kittens
+ * Adds 1 to the nipCount to act as a limiter
+ * If nipCount >= 3, the "Nipped" state is invoked
+ * Calls setKittenMood and saveKittens
  * @param {string} id
  */
 function catnip(id) {
   let kitten = findKittenById(id);
   kitten.affection = 5;
+  kitten.nipCount += 1;
   setKittenMood(kitten);
   saveKittens();
 }
@@ -209,11 +230,15 @@ function catnip(id) {
 /**
  * Sets the kittens mood based on its affection
  * Happy > 6, Tolerant <= 5, Angry <= 3, Gone <= 0
+ * Added a mood related to the nipCount variable, Nipped >= 3
+ * Incorporated && operators to not override the "Happy" or "Gone" mood states
  * Used an If / Else chain from least to greatest value
  * @param {Kitten} kitten
  */
 function setKittenMood(kitten) {
-  if (kitten.affection <= 0) {
+  if (kitten.nipCount >= 3 && kitten.affection > 0 && kitten.affection < 7) {
+    kitten.mood = "Nipped";
+  } else if (kitten.affection <= 0) {
     kitten.mood = "Gone";
   } else if (kitten.affection <= 3) {
     kitten.mood = "Angry";
@@ -223,6 +248,26 @@ function setKittenMood(kitten) {
     kitten.mood = "Happy";
   }
 }
+
+
+
+/**
+ * Function is tied to a button that appears when the nipCount >=3
+ * Has a 50% chance of lowering the nipCount by 1, and a 50% chance of lowering the affection by 1
+ * Is meant as a limiter to the number of times the Catnip function can be used
+ * Calls setKittenMood and saveKittens
+ */
+function nipped(id) {
+  let kitten = findKittenById(id);
+  if (Math.random() > .4) {
+    kitten.nipCount -= 1;
+  } else {
+    kitten.affection -= 1;
+  }
+  setKittenMood(kitten);
+  saveKittens();
+}
+
 
 
 /**
@@ -238,11 +283,12 @@ function getStarted() {
 
 
 /**
- * @typedef {{id: string;name: string;mood: string;affection: number;}} NewType
+ * @typedef {{id: string;name: string;mood: string;affection: number;nipCount: number;}} NewType
  */
 
 /**
  * Defines the Properties of a Kitten
+ * Added the nipCount property with a value of "number"
  * @typedef {NewType} Kitten
  */
 
@@ -267,3 +313,5 @@ function generateId() {
  * Also updates the Welcome buttons by default with the approriate number of Kittens
  */
 loadKittens()
+
+
