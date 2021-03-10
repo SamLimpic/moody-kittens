@@ -259,7 +259,7 @@ function setKittenMood(kitten) {
  */
 function nipped(id) {
   let kitten = findKittenById(id);
-  if (Math.random() > .4) {
+  if (Math.random() >= .5) {
     kitten.nipCount -= 1;
   } else {
     kitten.affection -= 1;
